@@ -15,6 +15,12 @@
     <!--/*@thymesVar id="id" type="java.lang.String"*/-->
     <!--/*@thymesVar id="name" type="java.lang.String"*/-->
 
+    <div th:if="${#fields.hasErrors()}">
+        <span class="validationError">
+                Please correct the problems below and resubmit
+        </span>
+    </div>
+
     <div class="grid">
         <div class="ingredient-group" id="wraps">
 
