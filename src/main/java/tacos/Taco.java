@@ -11,7 +11,7 @@ import java.util.List;
 public class Taco {
 
     private Long id;
-    private Date placedAt;
+    private Date createdAt;
 
     @NotNull
     @Size(min=5, message = "Name must be at least 5 characters long")
@@ -19,6 +19,6 @@ public class Taco {
 
     @NotNull(message = "You must choose at least one ingredient")
     @Size(min = 1, message = "You must choose at least one ingredient")
-    private List<String> ingredients;
+    private List<Ingredient> ingredients;
 
 }
