@@ -8,8 +8,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import tacos.Ingredient;
 import tacos.Ingredient.Type;
+import tacos.Order;
 import tacos.Taco;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -24,22 +26,49 @@ import java.util.stream.Collectors;
 public class DesignTacoController {
 
     private IngredientRepository ingredientRepo;
+    private TacoRepository tacoRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
         this.ingredientRepo = ingredientRepo;
+        this.tacoRepo = tacoRepo;
+    }
+    /*
+        When @ModelAttribute annotation is used at the method level it indicates the
+        purpose of that method is to add one or more model attributes.
+
+        Spring MVC will always make a call first to @ModelAttribute annotated methods
+        before it calls any request handles methods
+        @ModelAttribute methods are invoked before the controller methods
+        annotated with @RequestMapping are invoked
+     */
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return new Order();
     }
 
+    @ModelAttribute(name = "taco")
+    public Taco taco(){
+        return new Taco();
+    }
+
+    /*
+        When @ModelAttribute is used as a method request,
+        it indicates the argument should be retrieved from the model
+     */
+
     @PostMapping
-    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors){
+    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors,
+                                @ModelAttribute Order order){
         if(errors.hasErrors()){
             log.info("Got the error");
             return "design";
         }
 
+        Taco saved = tacoRepo.save(design);
+
+        order.addDesign(saved);
         log.info("Name" + design.getName());
-        for(String ingredient : design.getIngredients())
-            log.info(ingredient);
         return "redirect:/orders/current";
     }
 
