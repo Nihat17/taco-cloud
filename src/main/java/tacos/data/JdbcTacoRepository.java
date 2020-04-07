@@ -1,41 +1,47 @@
 package tacos.data;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import tacos.Ingredient;
 import tacos.Taco;
 
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class JdbcTacoRepository implements TacoRepository{
 
-    private JdbcTemplate jdbc;
+    private SimpleJdbcInsert tacoInserter;
+    private SimpleJdbcInsert tacoIngredientInserter;
 
-    public JdbcTacoRepository(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
+    @Autowired
+    public JdbcTacoRepository(JdbcTemplate jdbcTemplate) {
+        this.tacoInserter = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("Taco")
+                .usingGeneratedKeyColumns("id");
+        this.tacoIngredientInserter = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("Taco_Ingredients");
     }
 
     @Override
     public Taco save(Taco taco) {
         long tacoId = saveTacoInfo(taco);
         taco.setId(tacoId);
-        for(Ingredient ingredient : taco.getIngredients()){
-            saveIngredientToTaco(ingredient, tacoId);
+        for(String ingredientId : taco.getIngredients()){
+            saveIngredientToTaco(ingredientId, tacoId);
         }
+
         return taco;
     }
 
     private long saveTacoInfo(Taco taco){
         taco.setCreatedAt(new Date());
+        /* NullPointerException- so we just use SimpleJdbcInsert
         PreparedStatementCreator psc =
-                new PreparedStatementCreatorFactory("Insert into Taco (name, createdAt) values(?, ?)",
+                new PreparedStatementCreatorFactory("Insert into Taco (name, createdAt) values('?', '?')",
                         Types.VARCHAR, Types.TIMESTAMP).newPreparedStatementCreator(
                         Arrays.asList(
                                 taco.getName(),
@@ -43,13 +49,17 @@ public class JdbcTacoRepository implements TacoRepository{
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(psc, keyHolder);
-
-        return keyHolder.getKey().longValue();
+        */
+        Map<String, Object> values = new HashMap<>();
+        values.put("createdAt", new Timestamp(taco.getCreatedAt().getTime()));
+        values.put("name", taco.getName());
+        return tacoInserter.executeAndReturnKey(values).longValue();
     }
 
-    private void saveIngredientToTaco(Ingredient ingredient, long tacoId) {
-        jdbc.update("insert into Taco_Ingrdients (taco, ingredient) " +
-                "values (?, ?)", tacoId, ingredient.getId());
-
+    private void saveIngredientToTaco(String ingredientId, long tacoId) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("taco", tacoId);
+        values.put("ingredient", ingredientId);
+        tacoIngredientInserter.execute(values);
     }
 }

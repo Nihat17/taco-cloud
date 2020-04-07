@@ -27,11 +27,14 @@ public class DesignTacoController {
 
     private IngredientRepository ingredientRepo;
     private TacoRepository tacoRepo;
+    private IngredientByIdConverter converter;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo,
+                                IngredientByIdConverter converter) {
         this.ingredientRepo = ingredientRepo;
         this.tacoRepo = tacoRepo;
+        this.converter = converter;
     }
     /*
         When @ModelAttribute annotation is used at the method level it indicates the
