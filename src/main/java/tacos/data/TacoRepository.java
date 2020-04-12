@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TacoRepository extends CrudRepository<Taco, Long> {
     Taco save(Taco design);
+    Taco findById(long id);
 }
