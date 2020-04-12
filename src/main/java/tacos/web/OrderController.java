@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import tacos.Order;
+import tacos.data.Order;
 import tacos.data.OrderRepository;
 
 import javax.validation.Valid;
