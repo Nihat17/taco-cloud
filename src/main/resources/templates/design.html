@@ -4,65 +4,56 @@
 <head>
     <title>Taco Cloud</title>
     <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" type="text/css" href="/home/marshall/spring-workspace/taco-cloud/src/main/resources/static/styles.css"> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body>
-<div class="container">
-    <h1>Design your taco!</h1>
-    <img th:src="@{/images/TacoCloud.png}"/>
+    <div id="bg">
+        <div id="bg-content">
+            <h1>Design your Taco!</h1>
+        </div>
+    </div>
+    <!-- <img th:src="@{/images/TacoCloud.png}"/> -->
 
-    <form method="POST" th:object="${taco}">
-        <div class="form-group">
+    <div class="main">
+    <form id="form" method="POST" th:object="${taco}">
     <span class="validationError"
           th:if="${#fields.hasErrors('ingredients')}"
           th:errors="*{ingredients}">Ingredient Error</span>
 
-            <div class="grid">
-                <div class="ingredient-group" id="wraps">
                     <h3>Designate your wrap:</h3>
-                    <div th:each="ingredient : ${wrap}">
+                    <div class="input" th:each="ingredient : ${wrap}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
-                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                        <span th:text="${ingredient.name}">INGREDIENjshT</span><br/>
                     </div>
-                </div>
-
-                <div class="ingredient-group" id="proteins">
                     <h3>Pick your protein:</h3>
-                    <div th:each="ingredient : ${protein}">
+                    <div class="input" th:each="ingredient : ${protein}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
                         <span th:text="${ingredient.name}">INGREDIENT</span><br/>
                     </div>
-                </div>
 
-                <div class="ingredient-group" id="cheeses">
                     <h3>Choose your cheese:</h3>
-                    <div th:each="ingredient : ${cheese}">
+                    <div class="input" th:each="ingredient : ${cheese}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
                         <span th:text="${ingredient.name}">INGREDIENT</span><br/>
                     </div>
-                </div>
 
-                <div class="ingredient-group" id="veggies">
                     <h3>Determine your veggies:</h3>
-                    <div th:each="ingredient : ${veggies}">
+                    <div class="input" th:each="ingredient : ${veggies}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
-                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                        <span th:text="${ingredient.name}">INGREDIddddwwwdENT</span><br/>
                     </div>
-                </div>
 
-                <div class="ingredient-group" id="sauces">
                     <h3>Select your sauce:</h3>
-                    <div th:each="ingredient : ${sauce}">
+                    <div class="input" th:each="ingredient : ${sauce}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
                         <span th:text="${ingredient.name}">INGREDIENT</span><br/>
                     </div>
-                </div>
-            </div>
 
             <div>
 
@@ -76,8 +67,7 @@
 
                 <button>Submit your taco</button>
             </div>
-        </div>
     </form>
-</div>
+    </div>
 </body>
 </html>
