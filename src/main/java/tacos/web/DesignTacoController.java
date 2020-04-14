@@ -42,14 +42,18 @@ public class DesignTacoController {
         annotated with @RequestMapping are invoked
      */
     @ModelAttribute(name = "order")
-    public Order order(){
-        return new Order();
+    public Order order(Model model) {
+        if(!model.containsAttribute("order"))
+            return new Order();
+        return (Order) model.getAttribute("order");
     }
 
-    @ModelAttribute(name = "taco")
-    public Taco taco(){
-        return new Taco();
-    }
+    /*@ModelAttribute(name = "taco")
+    public Taco taco(Model model){
+        if(!model.containsAttribute("taco"))
+            return new Taco();
+        return (Taco) model.getAttribute("taco");
+    }*/
 
     /*
         When @ModelAttribute is used as a method request,
@@ -57,8 +61,8 @@ public class DesignTacoController {
      */
 
     @PostMapping
-    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors,
-                                @ModelAttribute Order order){
+    public String processDesign(@Valid @ModelAttribute Taco design, Errors errors,
+                                @ModelAttribute Order order, Model model){
         if(errors.hasErrors()){
             log.info("Got the error");
             return "design";
@@ -81,7 +85,7 @@ public class DesignTacoController {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
 
-        model.addAttribute("design", new Taco());
+        model.addAttribute("taco", new Taco());
         log.info("Everything is fine so far");
         return "design";
     }
