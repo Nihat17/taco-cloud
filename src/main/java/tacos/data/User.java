@@ -1,7 +1,7 @@
 package tacos.data;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Data
-@Entity
+//@Entity
 @RequiredArgsConstructor
 public class User implements UserDetails {
 
@@ -33,7 +33,6 @@ public class User implements UserDetails {
     private String state;
     private String zip;
     private String phoneNumber;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
