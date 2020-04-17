@@ -23,15 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(@Qualifier("userRepositoryUserDetailsService") UserDetailsService userDetailsService){
+    public SecurityConfig(@Qualifier("userRepositoryUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth
-               .userDetailsService(userDetailsService)
-               .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -41,19 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/h2-console/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin();
-
-        http.csrf()
-                .ignoringAntMatchers("/h2-console/**");
-        http.headers()
-                .frameOptions()
-                .sameOrigin();
+      http.authorizeRequests()
+              .antMatchers("/design", "/orders")
+              .hasRole("USER")
+              .antMatchers("/", "/**").permitAll();
     }
 }
 

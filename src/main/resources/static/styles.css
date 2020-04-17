@@ -35,18 +35,15 @@ body {
 .main{
   
 }
-.main #form {
+#form {
   text-align: center;
   font-family: Lucida Console, Monaco, monospace;
   background-color: #DCDCDC
 }
-#form .input {
-  border-left: 0px;
-  margin-left: 0px;
-  padding-left: 0px;
-
-
-
+.input {
+  position: relative;
+  width: 300px;
+  left: 500px;
   
 }
 div.ingredient-group:nth-child(odd) {
